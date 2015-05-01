@@ -5,6 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<p>Hello Spring Boot!</p>
+Date: ${time?date}
+<br>
+Time: ${time?time}
+<br>
+Message: ${message}
 </body>
 </html>
