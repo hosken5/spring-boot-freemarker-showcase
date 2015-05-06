@@ -47,6 +47,20 @@ class HomeController {
         model.put("message", this.message);
         return  "index" ;
     }
+
+    @RequestMapping("/base")
+    public  String base (Map<String, Object> model){
+        model.put("time", new Date());
+        model.put("message", this.message);
+        return  "base" ;
+    }
+
+    @RequestMapping("/child")
+    public  String child (Map<String, Object> model){
+        model.put("time", new Date());
+        model.put("message", this.message);
+        return  "child" ;
+    }
 }
 
 

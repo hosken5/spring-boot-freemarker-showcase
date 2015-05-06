@@ -8,7 +8,10 @@
     <#-- 下面使用插值 -->
         <h1>Welcome ${user} !</h1><br>
         <p>We have these animals:<br>
-           <u1><br>
+           <u1><br/>
+               test1:
+
+
         <#-- 使用FTL指令 -->
         <#list animals?sort_by("price") as being>
             <br>
@@ -43,7 +46,6 @@
                         <option value="${k}">${map[k]}</option>
                     </#list>
                </select>
-
                <br/>
                <br/>
                <br/>
