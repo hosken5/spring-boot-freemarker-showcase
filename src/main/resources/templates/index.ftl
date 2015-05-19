@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<#include "displaySize.ftl">
 <html>
 <head>
     <title>Hello Spring Boot!</title>
@@ -61,6 +62,16 @@ Test
 <@repeat count=3; cnt>
 ${cnt}. Test
 </@repeat>
+
+displaySize:
+<div>${displaySize(1024*1024*1024*2+100)}
+</div>
+<div>${displaySize(1024*1024*3+100)}
+</div>
+<div>${displaySize(1024*5+100)}
+</div>
+<div>${displaySize(400)}
+</div>
 
 </body>
 </html>

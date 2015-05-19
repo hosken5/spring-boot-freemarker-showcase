@@ -4,9 +4,6 @@ package config;
  * Created by hongpf on 15/5/4.
  */
 
-import cn.org.rapid_framework.freemarker.directive.BlockDirective;
-import cn.org.rapid_framework.freemarker.directive.ExtendsDirective;
-import cn.org.rapid_framework.freemarker.directive.OverrideDirective;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 

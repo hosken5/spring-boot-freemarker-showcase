@@ -61,6 +61,21 @@ class HomeController {
         model.put("message", this.message);
         return  "child" ;
     }
+
+    @RequestMapping("/file")
+    public  String file (Map<String, Object> model){
+        model.put("time", new Date());
+        model.put("message", this.message);
+        return  "file" ;
+    }
+
+
+    @RequestMapping("/jindutiao")
+    public  String jindutiao (Map<String, Object> model){
+        model.put("time", new Date());
+        model.put("message", this.message);
+        return  "jindutiao" ;
+    }
 }
 
 
