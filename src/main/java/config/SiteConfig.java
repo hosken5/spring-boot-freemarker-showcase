@@ -1,19 +1,27 @@
 package config;
 
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
-import javax.servlet.MultipartConfigElement;
+import javax.servlet.*;
+import java.util.Enumeration;
 
 /**
  * Created by joe on 11/2/14.
  */
 @Configuration
 public class SiteConfig extends WebMvcConfigurerAdapter {
+
+
+    public static final String REWRITE_FILTER_NAME = "rewriteFilter";
+    public static final String REWRITE_FILTER_CONF_PATH = "urlrewrite.xml";
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        registry.addResourceHandler("/bower_components/**").addResourceLocations("file:./src-web/bower_components/");
@@ -21,6 +29,19 @@ public class SiteConfig extends WebMvcConfigurerAdapter {
 //        registry.addResourceHandler("/images/**").addResourceLocations("file:./src-web/app/images/");
 //        registry.addResourceHandler("/scripts/**").addResourceLocations("file:./src-web/app/scripts/");
 //        registry.addResourceHandler("/files/**").addResourceLocations("file:../files/");
+    }
+
+    @Bean
+    public FilterRegistrationBean rewriteFilterConfig() {
+        FilterRegistrationBean reg = new FilterRegistrationBean();
+        reg.setName(REWRITE_FILTER_NAME);
+        reg.setFilter(new UrlRewriteFilter());
+        reg.addInitParameter("confPath", REWRITE_FILTER_CONF_PATH);
+        reg.addInitParameter("confReloadCheckInterval", "-1");
+        reg.addInitParameter("statusPath", "/redirect");
+        reg.addInitParameter("statusEnabledOnHosts", "*");
+        reg.addInitParameter("logLevel", "WARN");
+        return reg;
     }
 
     @Bean
@@ -38,5 +59,83 @@ public class SiteConfig extends WebMvcConfigurerAdapter {
         factory.setMaxFileSize("100MB");
         factory.setMaxRequestSize("100MB");
         return factory.createMultipartConfig();
+    }
+}
+
+final class FilterConfigImpl implements FilterConfig {
+
+    /**
+     * The Context with which we are associated.
+     */
+    private final ServletConfig sc;
+    /**
+     * The application Filter we are configured for.
+     */
+    private Filter filter;
+    /**
+     * Filter name
+     */
+    private String filterName;
+
+    // ------------------------------------------------------------------ //
+
+    public FilterConfigImpl(ServletConfig sc) {
+        this.sc = sc;
+    }
+
+    @Override
+    public String getInitParameter(String name) {
+        return sc.getInitParameter(name);
+    }
+
+    @Override
+    public String getFilterName() {
+        return filterName;
+    }
+
+    @Override
+    public Enumeration getInitParameterNames() {
+        return sc.getInitParameterNames();
+    }
+
+    @Override
+    public ServletContext getServletContext() {
+        return sc.getServletContext();
+    }
+
+    /**
+     * Return the application Filter we are configured for.
+     */
+    public Filter getFilter() {
+        return filter;
+    }
+
+    /**
+     * Release the Filter instance associated with this FilterConfig,
+     * if there is one.
+     */
+    public void recycle() {
+        if (this.filter != null) {
+            filter.destroy();
+        }
+        this.filter = null;
+    }
+
+    /**
+     * Set the {@link Filter} associated with this object.
+     *
+     * @param filter
+     */
+    public void setFilter(Filter filter) {
+        this.filter = filter;
+    }
+
+    /**
+     * Set the {@link Filter}'s name associated with this object.
+     *
+     * @param filterName
+     */
+    public void setFilterName(String filterName) {
+        this.filterName = filterName;
     }
 }
