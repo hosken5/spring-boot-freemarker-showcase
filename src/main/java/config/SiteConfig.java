@@ -9,8 +9,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
-import javax.servlet.*;
-import java.util.Enumeration;
+import javax.servlet.MultipartConfigElement;
 
 /**
  * Created by joe on 11/2/14.
@@ -26,7 +25,7 @@ public class SiteConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 //        registry.addResourceHandler("/bower_components/**").addResourceLocations("file:./src-web/bower_components/");
 //        registry.addResourceHandler("/styles/**").addResourceLocations("file:./src-web/.tmp/styles/");
-//        registry.addResourceHandler("/images/**").addResourceLocations("file:./src-web/app/images/");
+          registry.addResourceHandler("/images/**").addResourceLocations("file:./src-web/app/images/");
 //        registry.addResourceHandler("/scripts/**").addResourceLocations("file:./src-web/app/scripts/");
 //        registry.addResourceHandler("/files/**").addResourceLocations("file:../files/");
     }
@@ -59,83 +58,5 @@ public class SiteConfig extends WebMvcConfigurerAdapter {
         factory.setMaxFileSize("100MB");
         factory.setMaxRequestSize("100MB");
         return factory.createMultipartConfig();
-    }
-}
-
-final class FilterConfigImpl implements FilterConfig {
-
-    /**
-     * The Context with which we are associated.
-     */
-    private final ServletConfig sc;
-    /**
-     * The application Filter we are configured for.
-     */
-    private Filter filter;
-    /**
-     * Filter name
-     */
-    private String filterName;
-
-    // ------------------------------------------------------------------ //
-
-    public FilterConfigImpl(ServletConfig sc) {
-        this.sc = sc;
-    }
-
-    @Override
-    public String getInitParameter(String name) {
-        return sc.getInitParameter(name);
-    }
-
-    @Override
-    public String getFilterName() {
-        return filterName;
-    }
-
-    @Override
-    public Enumeration getInitParameterNames() {
-        return sc.getInitParameterNames();
-    }
-
-    @Override
-    public ServletContext getServletContext() {
-        return sc.getServletContext();
-    }
-
-    /**
-     * Return the application Filter we are configured for.
-     */
-    public Filter getFilter() {
-        return filter;
-    }
-
-    /**
-     * Release the Filter instance associated with this FilterConfig,
-     * if there is one.
-     */
-    public void recycle() {
-        if (this.filter != null) {
-            filter.destroy();
-        }
-        this.filter = null;
-    }
-
-    /**
-     * Set the {@link Filter} associated with this object.
-     *
-     * @param filter
-     */
-    public void setFilter(Filter filter) {
-        this.filter = filter;
-    }
-
-    /**
-     * Set the {@link Filter}'s name associated with this object.
-     *
-     * @param filterName
-     */
-    public void setFilterName(String filterName) {
-        this.filterName = filterName;
     }
 }
